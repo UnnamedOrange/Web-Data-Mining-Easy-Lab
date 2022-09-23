@@ -2,6 +2,7 @@
 #include <string>
 
 #include <flow/1_load_indices.hpp>
+#include <flow/2_load_pages.hpp>
 
 #define WORKING_PATH_FOR_DEBUG R"(D:\Libraries\Downloads\data)"
 
@@ -27,6 +28,8 @@ int main(int argn, char** argv)
     do
     {
         if (!flow::load_indices())
+            break;
+        if (!flow::load_pages())
             break;
         success = true;
     } while (0);
