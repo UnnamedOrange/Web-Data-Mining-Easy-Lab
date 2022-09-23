@@ -21,6 +21,7 @@ namespace flow
         std::sort(page_files.begin(), page_files.end());
 
         // Parse each page file.
+        global::page_list.reserve(1496606);
         for (const auto& file : page_files)
         {
             std::cout << "Parsing " << file << "..." << std::endl;
@@ -62,6 +63,41 @@ namespace flow
             for (const auto& page : global::page_list)
                 found_in_index += index_set.count(page.title);
             std::cout << "Found " << found_in_index << " pages in index."
+                      << std::endl;
+        }
+
+        // Compare pages with links.
+        if constexpr (false)
+        {
+            std::unordered_set<std::string> page_set;
+            page_set.reserve(1496606);
+            for (const auto& page : global::page_list)
+                page_set.insert(page.title);
+            std::cout << "Found " << page_set.size()
+                      << " unique pages in page list." << std::endl;
+
+            std::unordered_set<std::string> link_set;
+            link_set.reserve(14319445);
+            size_t n_link{};
+            for (const auto& page : global::page_list)
+                n_link += page.links.size();
+            link_set.reserve(n_link);
+            for (const auto& page : global::page_list)
+                for (const auto& link : page.links)
+                    link_set.insert(link);
+            std::cout << n_link << " links found, " << link_set.size()
+                      << " unique links found." << std::endl;
+
+            size_t found_in_page{};
+            for (const auto& link : link_set)
+                found_in_page += page_set.count(link);
+            std::cout << "Found " << found_in_page << " links in pages."
+                      << std::endl;
+
+            size_t found_in_link{};
+            for (const auto& page : page_set)
+                found_in_link += link_set.count(page);
+            std::cout << "Found " << found_in_link << " pages in links."
                       << std::endl;
         }
 
