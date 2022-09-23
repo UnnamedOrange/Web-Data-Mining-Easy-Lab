@@ -11,6 +11,11 @@ if(WIN32)
         COMMAND "win_flex" "--wincompat" "--outfile=${CMAKE_CURRENT_BINARY_DIR}/lex.yy.c"
                 "${CMAKE_CURRENT_SOURCE_DIR}/parser/page.lex" COMMAND_ERROR_IS_FATAL ANY
     )
+else()
+    execute_process(
+        COMMAND "flex" "--outfile=${CMAKE_CURRENT_BINARY_DIR}/lex.yy.c"
+                "${CMAKE_CURRENT_SOURCE_DIR}/parser/page.lex" COMMAND_ERROR_IS_FATAL ANY
+    )
 endif()
 
 add_executable(${PROJECT_NAME})

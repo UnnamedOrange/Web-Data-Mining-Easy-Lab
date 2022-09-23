@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+#include <cstring>
 #include <filesystem>
 #include <optional>
 #include <stdexcept>
@@ -50,7 +51,7 @@ namespace parser
             if (nullptr == std::fgets(buffer, sizeof(buffer), file))
                 throw std::runtime_error("Fail to read line.");
 
-            return std::string(buffer, buffer + strlen(buffer) - 1);
+            return std::string(buffer, buffer + std::strlen(buffer) - 1);
         }
     };
 } // namespace parser
