@@ -41,7 +41,7 @@ namespace flow
                 auto page = p.next();
                 if (!page)
                     break;
-                global::page_list.push_back(*page);
+                global::page_list.push_back(std::move(*page));
             }
         }
 
