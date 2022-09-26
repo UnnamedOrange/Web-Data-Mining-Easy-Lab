@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #include <utility>
+#include <vector>
 
 #include <global.hpp>
 
@@ -50,6 +51,34 @@ namespace flow
                       << (double)sum_out_degree /
                              global::graph.edges_forward.size()
                       << std::endl;
+        }
+
+        // The number of weakly connected component.
+        {
+            std::vector<bool> visited(global::graph.edges_backward.size());
+            size_t component_count = 0;
+            for (size_t i = 0; i < visited.size(); ++i)
+            {
+                if (visited[i])
+                    continue;
+                ++component_count;
+                std::vector<size_t> stack;
+                stack.push_back(i);
+                while (!stack.empty())
+                {
+                    size_t node = stack.back();
+                    stack.pop_back();
+                    visited[node] = true;
+                    for (size_t neighbor : global::graph.edges_forward[node])
+                        if (!visited[neighbor])
+                            stack.push_back(neighbor);
+                    for (size_t neighbor : global::graph.edges_backward[node])
+                        if (!visited[neighbor])
+                            stack.push_back(neighbor);
+                }
+            }
+            std::cout << "The number of weakly connected component: "
+                      << component_count << std::endl;
         }
 
         std::cout << std::endl;
