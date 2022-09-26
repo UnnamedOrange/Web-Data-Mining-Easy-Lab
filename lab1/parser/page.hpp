@@ -21,6 +21,7 @@ struct page_t
 
 namespace parser
 {
+    // This class should be a singleton.
     class page_parser final
     {
     private:
