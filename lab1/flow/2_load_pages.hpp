@@ -1,6 +1,12 @@
 #pragma once
 
+#include <filesystem>
+#include <thread>
 #include <unordered_set>
+#include <vector>
+
+#include <global.hpp>
+#include <parser/page.hpp>
 
 namespace flow
 {
@@ -22,21 +28,40 @@ namespace flow
 
         // Parse each page file.
         global::page_list.reserve(1496606);
-        for (const auto& file : page_files)
+
+        std::vector<std::vector<page_t>> page_lists(page_files.size());
+        std::vector<std::thread> parse_threads;
+        for (size_t i = 0; i < page_files.size(); i++)
         {
-            std::cout << "Parsing " << file << "..." << std::endl;
+            parse_threads.emplace_back(
+                [&](size_t idx) {
+                    const std::filesystem::path& file = page_files[idx];
+                    parser::page_parser p;
+                    p.open(file.string());
 
-            parser::page_parser p;
-            p.open(file.string());
-
-            while (true)
-            {
-                auto page = p.next();
-                if (!page)
-                    break;
-                global::page_list.push_back(*page);
-            }
+                    while (true)
+                    {
+                        auto page = p.next();
+                        if (!page)
+                            break;
+                        page_lists[idx].push_back(*page);
+                    }
+                    std::cout << "Finish parsing " << file << "." << std::endl;
+                },
+                i);
         }
+        for (auto& t : parse_threads)
+            t.join();
+
+        // Merge the page lists.
+        std::cout << "Merging pages..." << std::endl;
+        size_t n_pages{};
+        for (auto& list : page_lists)
+            n_pages += list.size();
+        global::page_list.reserve(n_pages);
+        for (auto& list : page_lists)
+            for (auto& page : list)
+                global::page_list.push_back(std::move(page));
 
         // Output the result.
         std::cout << global::page_list.size() << " pages found." << std::endl;

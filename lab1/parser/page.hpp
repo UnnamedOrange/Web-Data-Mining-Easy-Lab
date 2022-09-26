@@ -1,11 +1,13 @@
 #pragma once
 
 #include <cstdio>
+#include <fstream>
 #include <optional>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
+#include "FlexLexer.h"
 #include "lex_interface.h"
 
 struct page_t
@@ -24,34 +26,20 @@ namespace parser
     class page_parser final
     {
     private:
-        FILE*(&file) = yyin;
-        char*(&buffer) = yytext;
-        const int(&length) = yyleng;
+        std::ifstream ifs;
+        std::vector<char> iobuf;
+        yyFlexLexer lexer;
 
     private:
         page_t current_page;
 
     public:
-        ~page_parser() { try_close(); }
-
-    private:
-        void try_close() noexcept
-        {
-            if (file)
-            {
-                fclose(file);
-                file = nullptr;
-            }
-        }
-
-    public:
         void open(const std::string& path)
         {
-            FILE* file_to_open = std::fopen(path.c_str(), "r");
-            if (!file_to_open)
-                throw std::runtime_error("Failed to open file: " + path);
-            try_close();
-            file = file_to_open;
+            ifs.open(path);
+            iobuf.resize(2 * 1024 * 1024);
+            ifs.rdbuf()->pubsetbuf(iobuf.data(), iobuf.size());
+            lexer.yyrestart(ifs);
         }
 
     public:
@@ -62,20 +50,21 @@ namespace parser
             token_t token;
             do
             {
-                token = static_cast<token_t>(yylex());
+                token = static_cast<token_t>(lexer.yylex());
                 if (token > token_t::t_unused)
                 {
                     switch (token)
                     {
                     case token_t::t_title:
                     {
-                        current_page.title = buffer;
+                        current_page.title = lexer.YYText();
                         break;
                     }
                     case token_t::t_link:
                     {
                         current_page.links.push_back(
-                            std::string(buffer + 2, buffer + length - 2));
+                            std::string(lexer.YYText() + 2,
+                                        lexer.YYText() + lexer.YYLeng() - 2));
                         break;
                     }
                     case token_t::t_page_begin:

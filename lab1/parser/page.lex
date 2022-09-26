@@ -53,7 +53,7 @@ link_pattern "[["[^\[\]]*"]]"
 %%
 
 /* 3 */
-int yywrap(void)
+int yyFlexLexer::yywrap(void)
 {
 	return 1;
 }

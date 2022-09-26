@@ -17,11 +17,6 @@ extern "C"
         t_link,
     };
 
-    extern FILE* yyin;
-    extern char* yytext;
-    extern int yyleng;
-    extern int yylex(void);
-
 #ifdef __cplusplus
 }
 #endif
