@@ -86,6 +86,8 @@ namespace graph
             // Read the data.
             ifs.read(reinterpret_cast<char*>(new_raw_edges.data()),
                      new_raw_edges.size() * sizeof(edge_t));
+
+            raw_edges.swap(new_raw_edges);
         }
     };
 } // namespace graph
