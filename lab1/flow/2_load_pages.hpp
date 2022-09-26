@@ -1,6 +1,13 @@
 #pragma once
 
+#include <filesystem>
+#include <iostream>
+#include <string>
 #include <unordered_set>
+#include <vector>
+
+#include <global.hpp>
+#include <parser/page.hpp>
 
 namespace flow
 {
