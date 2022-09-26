@@ -30,6 +30,19 @@ namespace flow
         std::cout << "Building the graph..." << std::endl;
         global::graph.build_graph(global::node_names.size());
 
+        // Print some examples.
+        std::random_device rd;
+        std::default_random_engine e(rd());
+        std::uniform_int_distribution<size_t> u(0, global::graph.size() - 1);
+        std::cout << "Some examples: ";
+        for (size_t i = 0; i < 10; ++i)
+        {
+            const auto& edge = global::graph.raw_edges[u(e)];
+            std::cout << global::node_names[edge.from] << " -> "
+                      << global::node_names[edge.to] << "; ";
+        }
+        std::cout << std::endl;
+
         std::cout << std::endl;
         return true;
     }

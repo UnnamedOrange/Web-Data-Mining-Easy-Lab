@@ -27,28 +27,29 @@ namespace graph
     class graph_t
     {
     private:
-        std::vector<edge_t> raw_edges;
+        std::vector<edge_t> _raw_edges;
         std::vector<std::vector<node_t>> _edges_forward;
         std::vector<std::vector<node_t>> _edges_backward;
 
     public:
+        const std::vector<edge_t>& raw_edges{_raw_edges};
         const std::vector<std::vector<node_t>>& edges_forward{_edges_forward};
         const std::vector<std::vector<node_t>>& edges_backward{_edges_backward};
 
     public:
         void clear()
         {
-            raw_edges.clear();
+            _raw_edges.clear();
             _edges_forward.clear();
             _edges_backward.clear();
         }
-        void append(const edge_t& edge) { raw_edges.push_back(edge); }
+        void append(const edge_t& edge) { _raw_edges.push_back(edge); }
         void sort()
         {
-            std::sort(raw_edges.begin(), raw_edges.end());
-            raw_edges.erase(std::unique(raw_edges.begin(), raw_edges.end()),
-                            raw_edges.end());
-            raw_edges.shrink_to_fit();
+            std::sort(_raw_edges.begin(), _raw_edges.end());
+            _raw_edges.erase(std::unique(_raw_edges.begin(), _raw_edges.end()),
+                             _raw_edges.end());
+            _raw_edges.shrink_to_fit();
         }
         void build_graph(size_t n_node)
         {
@@ -56,23 +57,23 @@ namespace graph
 
             _edges_forward.clear();
             _edges_forward.resize(n_node);
-            for (const auto& edge : raw_edges)
+            for (const auto& edge : _raw_edges)
                 _edges_forward[edge.from].push_back(edge.to);
 
             _edges_backward.clear();
             _edges_backward.resize(n_node);
-            for (const auto& edge : raw_edges)
+            for (const auto& edge : _raw_edges)
                 _edges_backward[edge.to].push_back(edge.from);
         }
-        size_t size() const { return raw_edges.size(); }
+        size_t size() const { return _raw_edges.size(); }
 
     public:
         void save(const std::filesystem::path& path)
         {
             sort();
             std::ofstream ofs(path, std::ios::binary);
-            ofs.write(reinterpret_cast<const char*>(raw_edges.data()),
-                      raw_edges.size() * sizeof(edge_t));
+            ofs.write(reinterpret_cast<const char*>(_raw_edges.data()),
+                      _raw_edges.size() * sizeof(edge_t));
         }
         void load(const std::filesystem::path& path)
         {
@@ -87,7 +88,7 @@ namespace graph
             ifs.read(reinterpret_cast<char*>(new_raw_edges.data()),
                      new_raw_edges.size() * sizeof(edge_t));
 
-            raw_edges.swap(new_raw_edges);
+            _raw_edges.swap(new_raw_edges);
         }
     };
 } // namespace graph

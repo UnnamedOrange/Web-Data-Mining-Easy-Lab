@@ -28,6 +28,7 @@ namespace graph
             return std::lower_bound(names.begin(), names.end(), str) -
                    names.begin();
         }
+        const std::string& operator[](size_t i) const { return names[i]; }
 
     public:
         void save(const std::filesystem::path& path) const
