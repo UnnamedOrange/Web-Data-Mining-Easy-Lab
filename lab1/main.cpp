@@ -6,6 +6,7 @@
 #include <flow/3_cache_graph.hpp>
 #include <flow/4_load_cached_graph.hpp>
 #include <flow/5_analyze_graph.hpp>
+#include <flow/6_pagerank.hpp>
 
 #define WORKING_DIR_FOR_DEBUG R"(D:\Libraries\Downloads\data)"
 
@@ -44,11 +45,13 @@ int main(int argn, char** argv)
         }
         if (!flow::load_cached_graph())
             break;
-        if constexpr (true)
+        if constexpr (true) // Modify to false after called once.
         {
             if (!flow::analyze_graph())
                 break;
         }
+        if (!flow::pagerank())
+            break;
         success = true;
     } while (0);
     if (!success)
