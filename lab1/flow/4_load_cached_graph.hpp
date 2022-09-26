@@ -17,12 +17,12 @@ namespace flow
         std::cout << "4. Load cached graph." << std::endl;
 
         // Load the node names.
-        global::node_names.load(global::working_path / "node_names.txt");
+        global::node_names.load(global::working_dir / "node_names.txt");
         std::cout << "Loaded " << global::node_names.size() << " node names."
                   << std::endl;
 
         // Load the graph.
-        global::graph.load(global::working_path / "graph.dat");
+        global::graph.load(global::working_dir / "graph.dat");
         std::cout << "Loaded " << global::graph.size() << " edges."
                   << std::endl;
 

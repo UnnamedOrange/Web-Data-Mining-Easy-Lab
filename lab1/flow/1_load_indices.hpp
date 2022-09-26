@@ -21,7 +21,7 @@ namespace flow
         // Enumerate the index files.
         std::vector<std::filesystem::path> index_files;
         for (auto& p : std::filesystem::recursive_directory_iterator(
-                 global::working_path))
+                 global::working_dir))
             if (p.path().u16string().find(u"index") != std::u16string::npos)
                 index_files.push_back(p.path());
         std::sort(index_files.begin(), index_files.end());

@@ -11,7 +11,7 @@
 namespace global
 {
     // Configurations.
-    inline std::filesystem::path working_path;
+    inline std::filesystem::path working_dir;
 
     // Raw data.
     inline std::vector<std::string> index_list;

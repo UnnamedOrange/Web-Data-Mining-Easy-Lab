@@ -22,7 +22,7 @@ namespace flow
         // Enumerate the page files.
         std::vector<std::filesystem::path> page_files;
         for (auto& p : std::filesystem::recursive_directory_iterator(
-                 global::working_path))
+                 global::working_dir))
             if (p.path().u16string().find(u"index") == std::u16string::npos)
                 page_files.push_back(p.path());
         std::sort(page_files.begin(), page_files.end());
