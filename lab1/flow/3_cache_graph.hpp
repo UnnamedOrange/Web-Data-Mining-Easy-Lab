@@ -34,7 +34,7 @@ namespace flow
                 for (const auto& link : page.links)
                     link_names.append(link);
             link_names.sort();
-            link_names.save("link_names.txt");
+            link_names.save(global::working_path / "link_names.txt");
         }
 
         // Build the graph.
@@ -53,8 +53,8 @@ namespace flow
         global::graph.build_graph(global::node_names.size());
 
         // Save.
-        global::node_names.save("node_names.txt");
-        global::graph.save("graph.dat");
+        global::node_names.save(global::working_path / "node_names.txt");
+        global::graph.save(global::working_path / "graph.dat");
         std::cout << "Cache saved." << std::endl;
 
         // Output the result.
