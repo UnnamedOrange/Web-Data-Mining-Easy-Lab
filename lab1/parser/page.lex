@@ -48,7 +48,7 @@ link_pattern "[["[^\[\]]*"]]"
 
 . |
 [\t\n] {
-	return (int)t_unused; // Suppress outputs.
+	return (int)t_unused; /* Suppress outputs. */
 }
 %%
 
