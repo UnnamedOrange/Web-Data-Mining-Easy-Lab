@@ -5,6 +5,7 @@
 #include <flow/2_load_pages.hpp>
 #include <flow/3_cache_graph.hpp>
 #include <flow/4_load_cached_graph.hpp>
+#include <flow/5_analyze_graph.hpp>
 
 #define WORKING_PATH_FOR_DEBUG R"(D:\Libraries\Downloads\data)"
 
@@ -34,7 +35,7 @@ int main(int argn, char** argv)
             if (!flow::load_indices())
                 break;
         }
-        if constexpr (true)
+        if constexpr (true) // Modify to false after called once.
         {
             if (!flow::load_pages())
                 break;
@@ -43,6 +44,11 @@ int main(int argn, char** argv)
         }
         if (!flow::load_cached_graph())
             break;
+        if constexpr (true)
+        {
+            if (!flow::analyze_graph())
+                break;
+        }
         success = true;
     } while (0);
     if (!success)
