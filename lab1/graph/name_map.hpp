@@ -25,8 +25,11 @@ namespace graph
         size_t size() const { return names.size(); }
         size_t find(std::string_view str) const
         {
-            return std::lower_bound(names.begin(), names.end(), str) -
-                   names.begin();
+            auto idx = std::lower_bound(names.begin(), names.end(), str) -
+                       names.begin();
+            if (idx == names.size() || names[idx] != str)
+                return names.size();
+            return idx;
         }
         const std::string& operator[](size_t i) const { return names[i]; }
 
