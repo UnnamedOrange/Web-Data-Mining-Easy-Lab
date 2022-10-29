@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <flow/1_load_pages.hpp>
+#include <flow/2_sample_pages.hpp>
 #include <global.hpp>
 
 #define WORKING_DIR_FOR_DEBUG R"(D:\Libraries\Downloads)"
@@ -27,6 +28,8 @@ int main(int argn, char** argv)
     do
     {
         if (!flow::load_pages())
+            break;
+        if (!flow::sample_pages())
             break;
         success = true;
     } while (0);
